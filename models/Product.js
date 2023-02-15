@@ -20,7 +20,7 @@ class Product {
         return product
     }
 
-    static getProducts() {
+    static getProduct() {
         const products = conn.db().collection('products').find().toArray()
 
         return products
@@ -29,9 +29,28 @@ class Product {
 
     static async getProductById(id){
         const product = await conn.db().collection('products').findOne({
-            _id : ObjectId(id)
+            _id : new ObjectId(id)
         })
         return product
+    }
+
+    static async removeProductById(id){
+        await conn.db().collection('products').deleteOne({
+            _id : new ObjectId(id)
+        })
+
+        res.redirect('/products')
+
+        return
+        
+    }
+
+    async updateProduct(id){
+        conn.db().collection('products').updateOne({
+            _id : new ObjectId(id)} , {$set: this}
+        )
+        return
+
     }
 }
 module.exports = Product
